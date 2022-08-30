@@ -7,13 +7,34 @@
 
 import UIKit
 
-class ViewController: UIViewController {
-
+class ViewController: UIViewController, UIScrollViewDelegate {
+    
+    @IBOutlet var scrollView: UIScrollView!
+    @IBOutlet var imageView: UIImageView!
+    
+    //MARK: - View LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        
+        scrollView.delegate = self
     }
-
-
+    
+    override func viewDidAppear(_ animated: Bool) {
+        updateZoomFor(size: view.bounds.size)
+    }
+    
+    //MARK: - UIScrollViewDelegate methods for zooming
+    func updateZoomFor(size: CGSize) {
+        let widthScale = size.width/scrollView.bounds.width
+        let heightScale = size.height/scrollView.bounds.height
+        let minScale = min(widthScale, heightScale)
+        
+        scrollView.minimumZoomScale = minScale
+        scrollView.zoomScale = minScale
+    }
+    
+    func viewForZooming(in scrollView: UIScrollView) -> UIView? {
+        imageView
+    }
 }
 
